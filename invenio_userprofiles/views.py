@@ -24,6 +24,7 @@ from .api import current_userprofile
 from .forms import EmailProfileForm, ProfileForm, VerificationForm, \
     confirm_register_form_factory, register_form_factory
 from .models import UserProfile
+from .signals import after_profile_update
 
 blueprint = Blueprint(
     'invenio_userprofiles',
@@ -113,7 +114,13 @@ def profile_form_factory():
         return EmailProfileForm(
             formdata=None,
             username=current_userprofile.username,
-            full_name=current_userprofile.full_name,
+            last_name=current_userprofile.last_name,
+            first_name=current_userprofile.first_name,
+            birth_date=current_userprofile.birth_date,
+            street=current_userprofile.street,
+            postal_code=current_userprofile.postal_code,
+            city=current_userprofile.city,
+            phone=current_userprofile.phone,
             email=current_user.email,
             email_repeat=current_user.email,
             prefix='profile', )
@@ -143,7 +150,13 @@ def handle_profile_form(form):
         with db.session.begin_nested():
             # Update profile.
             current_userprofile.username = form.username.data
-            current_userprofile.full_name = form.full_name.data
+            current_userprofile.last_name=form.last_name.data,
+            current_userprofile.first_name=form.first_name.data,
+            current_userprofile.birth_date=form.birth_date.data,
+            current_userprofile.street=form.street.data,
+            current_userprofile.postal_code=form.postal_code.data,
+            current_userprofile.city=form.city.data,
+            current_userprofile.phone=form.phone.data
             db.session.add(current_userprofile)
 
             # Update email
@@ -165,3 +178,7 @@ def handle_profile_form(form):
         else:
             # NOTE: Flash message after successful update of profile.
             flash(_('Profile was updated.'), category='success')
+        after_profile_update.send(
+            current_app._get_current_object(),
+            profile=current_userprofile
+        )

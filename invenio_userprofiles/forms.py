@@ -17,8 +17,9 @@ from flask_security.forms import email_required, email_validator, \
 from flask_wtf import FlaskForm
 from sqlalchemy.orm.exc import NoResultFound
 from wtforms import FormField, StringField, SubmitField
-from wtforms.validators import DataRequired, EqualTo, StopValidation, \
-    ValidationError
+from wtforms.fields.html5 import DateField
+from wtforms.validators import DataRequired, EqualTo, Optional, \
+    StopValidation, ValidationError
 
 from .api import current_userprofile
 from .models import UserProfile
@@ -52,9 +53,39 @@ class ProfileForm(FlaskForm):
         validators=[DataRequired(message=_('Username not provided.'))],
         filters=[strip_filter], )
 
-    full_name = StringField(
+    last_name = StringField(
         # NOTE: Form label
-        _('Full name'),
+        _('Last name'),
+        filters=[strip_filter], )
+
+    first_name = StringField(
+        # NOTE: Form label
+        _('First name'),
+        filters=[strip_filter], )
+
+    birth_date = DateField(
+        _('Birth Date'),
+        format='%Y-%m-%d',
+        validators=(Optional(),))
+
+    street = StringField(
+        # NOTE: Form label
+        _('Street'),
+        filters=[strip_filter], )
+
+    postal_code = StringField(
+        # NOTE: Form label
+        _('Postal Code'),
+        filters=[strip_filter], )
+
+    city = StringField(
+        # NOTE: Form label
+        _('City'),
+        filters=[strip_filter], )
+
+    phone = StringField(
+        # NOTE: Form label
+        _('Phone Number'),
         filters=[strip_filter], )
 
     def validate_username(form, field):

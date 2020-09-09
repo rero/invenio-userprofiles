@@ -55,8 +55,26 @@ class UserProfile(db.Model):
     _displayname = db.Column('displayname', db.String(255))
     """Case preserving version of username."""
 
-    full_name = db.Column(db.String(255), nullable=False, default='')
-    """Full name of person."""
+    last_name = db.Column(db.String(255), nullable=False, default='')
+    """Last name of person."""
+
+    first_name = db.Column(db.String(255), nullable=False, default='')
+    """First name of person."""
+
+    birth_date = db.Column(db.Date, nullable=False)
+    """Birth date of person."""
+
+    street = db.Column(db.String(255), nullable=False, default='')
+    """Street address of person."""
+
+    postal_code = db.Column(db.String(16), nullable=False, default='')
+    """Postal code address of person."""
+
+    city = db.Column(db.String(255), nullable=False, default='')
+    """City address of person."""
+
+    phone = db.Column(db.String(255), nullable=False, default='')
+    """Phone number of person."""
 
     @hybrid_property
     def username(self):
