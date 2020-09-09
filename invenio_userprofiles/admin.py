@@ -30,7 +30,13 @@ class UserProfileView(ModelView):
     column_list = (
         'user_id',
         '_displayname',
-        'full_name',
+        'last_name',
+        'first_name',
+        'birth_date',
+        'street',
+        'postal_code',
+        'city',
+        'phone'
     )
 
     column_searchable_list = \
@@ -39,7 +45,15 @@ class UserProfileView(ModelView):
         columns_sortable_list = \
         column_list
 
-    form_columns = ('username', 'full_name')
+    form_columns = (
+        'last_name',
+        'first_name',
+        'birth_date',
+        'street',
+        'postal_code',
+        'city',
+        'phone'
+    )
 
     column_labels = {
         '_displayname': _('Username'),
