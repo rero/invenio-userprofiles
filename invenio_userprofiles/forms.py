@@ -126,7 +126,7 @@ class EmailProfileForm(ProfileForm):
         _('Email address'),
         filters=[lambda x: x.lower() if x is not None else x, ],
         validators=[
-            email_required,
+            Optional(),
             current_user_email,
             email_validator,
             unique_user_email,
@@ -140,7 +140,7 @@ class EmailProfileForm(ProfileForm):
         description=_('Please re-enter your email address.'),
         filters=[lambda x: x.lower() if x else x, ],
         validators=[
-            email_required,
+            Optional(),
             # NOTE: Form validation error.
             EqualTo('email', message=_('Email addresses do not match.'))
         ]
