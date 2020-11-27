@@ -121,6 +121,7 @@ def profile_form_factory():
             postal_code=current_userprofile.postal_code,
             city=current_userprofile.city,
             phone=current_userprofile.phone,
+            keep_history=current_userprofile.keep_history,
             email=current_user.email,
             email_repeat=current_user.email,
             prefix='profile', )
@@ -156,7 +157,8 @@ def handle_profile_form(form):
             current_userprofile.street=form.street.data,
             current_userprofile.postal_code=form.postal_code.data,
             current_userprofile.city=form.city.data,
-            current_userprofile.phone=form.phone.data
+            current_userprofile.phone=form.phone.data,
+            current_userprofile.keep_history=form.keep_history.data
             db.session.add(current_userprofile)
 
             # Update email
