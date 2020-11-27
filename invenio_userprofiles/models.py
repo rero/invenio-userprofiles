@@ -76,6 +76,10 @@ class UserProfile(db.Model):
     phone = db.Column(db.String(255), nullable=False, default='')
     """Phone number of person."""
 
+    keep_history = db.Column(
+        db.Boolean(name='keep_history'), nullable=False, default=False)
+    """Boolean stating to keep loan history or not."""
+
     @hybrid_property
     def username(self):
         """Get username."""

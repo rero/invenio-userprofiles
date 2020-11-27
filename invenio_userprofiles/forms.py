@@ -16,7 +16,7 @@ from flask_security.forms import email_required, email_validator, \
     unique_user_email
 from flask_wtf import FlaskForm
 from sqlalchemy.orm.exc import NoResultFound
-from wtforms import FormField, StringField, SubmitField
+from wtforms import BooleanField, FormField, StringField, SubmitField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, EqualTo, Optional, \
     StopValidation, ValidationError
@@ -87,6 +87,12 @@ class ProfileForm(FlaskForm):
         # NOTE: Form label
         _('Phone Number'),
         filters=[strip_filter], )
+
+    keep_history = BooleanField(
+        # NOTE: Form label
+        _('Keep History'),
+        validators=[],
+        description=_('If enabled the loan history is saved for a maximum of six months. It is visible to you and the library staff.'))
 
     def validate_username(form, field):
         """Wrap username validator for WTForms."""

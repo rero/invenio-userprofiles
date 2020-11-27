@@ -36,7 +36,8 @@ class UserProfileView(ModelView):
         'street',
         'postal_code',
         'city',
-        'phone'
+        'phone',
+        'keep_history'
     )
 
     column_searchable_list = \
@@ -52,7 +53,8 @@ class UserProfileView(ModelView):
         'street',
         'postal_code',
         'city',
-        'phone'
+        'phone',
+        'keep_history'
     )
 
     column_labels = {
