@@ -20,6 +20,7 @@ from wtforms import BooleanField, FormField, StringField, SubmitField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, EqualTo, Optional, \
     StopValidation, ValidationError
+from wtforms_components import read_only
 
 from .api import current_userprofile
 from .models import UserProfile
@@ -51,17 +52,17 @@ class ProfileForm(FlaskForm):
         description=_('Required. %(username_rules)s',
                       username_rules=USERNAME_RULES),
         validators=[DataRequired(message=_('Username not provided.'))],
-        filters=[strip_filter], )
+        filters=[strip_filter])
 
     last_name = StringField(
         # NOTE: Form label
         _('Last name'),
-        filters=[strip_filter], )
+        filters=[strip_filter])
 
     first_name = StringField(
         # NOTE: Form label
         _('First name'),
-        filters=[strip_filter], )
+        filters=[strip_filter])
 
     birth_date = DateField(
         _('Birth Date'),
@@ -81,7 +82,7 @@ class ProfileForm(FlaskForm):
     city = StringField(
         # NOTE: Form label
         _('City'),
-        filters=[strip_filter], )
+        filters=[strip_filter])
 
     phone = StringField(
         # NOTE: Form label
@@ -93,6 +94,15 @@ class ProfileForm(FlaskForm):
         _('Keep History'),
         validators=[],
         description=_('If enabled the loan history is saved for a maximum of six months. It is visible to you and the library staff.'))
+
+    def __init__(self, *args, **kwargs):
+        """."""
+        super().__init__(*args, **kwargs)
+        # read only fields
+        read_only(self.first_name)
+        read_only(self.last_name)
+        read_only(self.birth_date)
+        read_only(self.city)
 
     def validate_username(form, field):
         """Wrap username validator for WTForms."""
