@@ -145,7 +145,6 @@ def handle_verification_form(form):
 def handle_profile_form(form):
     """Handle profile update form."""
     form.process(formdata=request.form)
-
     if form.validate_on_submit():
         email_changed = False
         with db.session.begin_nested():
