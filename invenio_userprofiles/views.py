@@ -107,16 +107,25 @@ def profile():
 def profile_form_factory():
     """Create a profile form."""
     if current_app.config['USERPROFILES_EMAIL_ENABLED']:
+        country = current_user.profile.country if current_user.profile else None
+        default_country = current_app.config['USERPROFILES_DEFAULT_COUNTRY']
+        if not country and default_country:
+            country = default_country
         return EmailProfileForm(
             formdata=None,
             username=current_userprofile.username,
             last_name=current_userprofile.last_name,
             first_name=current_userprofile.first_name,
+            gender=current_userprofile.gender,
             birth_date=current_userprofile.birth_date,
             street=current_userprofile.street,
             postal_code=current_userprofile.postal_code,
             city=current_userprofile.city,
-            phone=current_userprofile.phone,
+            country=country,
+            home_phone=current_userprofile.home_phone,
+            business_phone=current_userprofile.business_phone,
+            mobile_phone=current_userprofile.mobile_phone,
+            other_phone=current_userprofile.other_phone,
             keep_history=current_userprofile.keep_history,
             email=current_user.email,
             email_repeat=current_user.email,
@@ -148,11 +157,16 @@ def handle_profile_form(form):
             current_userprofile.username = form.username.data
             current_userprofile.last_name=form.last_name.data,
             current_userprofile.first_name=form.first_name.data,
+            current_userprofile.gender=form.gender.data,
             current_userprofile.birth_date=form.birth_date.data,
             current_userprofile.street=form.street.data,
             current_userprofile.postal_code=form.postal_code.data,
             current_userprofile.city=form.city.data,
-            current_userprofile.phone=form.phone.data,
+            current_userprofile.country=form.country.data,
+            current_userprofile.home_phone=form.home_phone.data,
+            current_userprofile.business_phone=form.business_phone.data,
+            current_userprofile.mobile_phone=form.mobile_phone.data,
+            current_userprofile.other_phone=form.other_phone.data,
             current_userprofile.keep_history=form.keep_history.data
             db.session.add(current_userprofile)
 
@@ -165,7 +179,8 @@ def handle_profile_form(form):
                 email_changed = True
         db.session.commit()
 
-        if email_changed:
+        if email_changed and current_app.config.get(
+            'SECURITY_CONFIRMABLE') == True:
             send_confirmation_instructions(current_user)
             # NOTE: Flash message after successful update of profile.
             flash(_('Profile was updated. We have sent a verification '

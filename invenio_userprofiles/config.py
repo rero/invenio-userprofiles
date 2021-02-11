@@ -28,3 +28,12 @@ USERPROFILES_BASE_TEMPLATE = None
 
 USERPROFILES_SETTINGS_TEMPLATE = None
 """Settings base templates for user profile module."""
+
+USERPROFILES_DEFAULT_COUNTRY = None
+"""Default country marc21 code for the user profile."""
+
+USERPROFILES_COUNTRIES = lambda: [('ch', 'Switzerland')]
+"""Function to return the list of label, value for contries."""
+
+USERPROFILES_READONLY_FIELDS = lambda: []
+"""Function to return readonly fields."""

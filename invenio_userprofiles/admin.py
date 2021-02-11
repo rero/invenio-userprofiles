@@ -32,11 +32,16 @@ class UserProfileView(ModelView):
         '_displayname',
         'last_name',
         'first_name',
+        'gender',
         'birth_date',
         'street',
         'postal_code',
         'city',
-        'phone',
+        'country',
+        'home_phone',
+        'business_phone',
+        'mobile_phone',
+        'other_phone',
         'keep_history'
     )
 
@@ -49,11 +54,16 @@ class UserProfileView(ModelView):
     form_columns = (
         'last_name',
         'first_name',
+        'gender',
         'birth_date',
         'street',
         'postal_code',
         'city',
-        'phone',
+        'country',
+        'home_phone',
+        'business_phone',
+        'mobile_phone',
+        'other_phone',
         'keep_history'
     )
 

@@ -10,16 +10,18 @@
 
 from __future__ import absolute_import, print_function
 
+from flask import current_app
 from flask_babelex import lazy_gettext as _
 from flask_login import current_user
 from flask_security.forms import email_required, email_validator, \
     unique_user_email
 from flask_wtf import FlaskForm
 from sqlalchemy.orm.exc import NoResultFound
-from wtforms import BooleanField, FormField, StringField, SubmitField
+from wtforms import BooleanField, FormField, StringField, SubmitField, \
+    SelectField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import DataRequired, EqualTo, Optional, \
-    StopValidation, ValidationError
+    StopValidation, ValidationError, Regexp
 from wtforms_components import read_only
 
 from .api import current_userprofile
@@ -40,7 +42,6 @@ def current_user_email(form, field):
     """Field validator to stop validation if email wasn't changed."""
     if current_user.email == field.data:
         raise StopValidation()
-
 
 class ProfileForm(FlaskForm):
     """Form for editing user profile."""
@@ -84,10 +85,50 @@ class ProfileForm(FlaskForm):
         _('City'),
         filters=[strip_filter])
 
-    phone = StringField(
+    home_phone = StringField(
         # NOTE: Form label
-        _('Phone Number'),
-        filters=[strip_filter], )
+        _('Home phone number'),
+        filters=[strip_filter],
+        validators=[
+            Regexp(r'^\+[0-9]*$|^$', message=_("Phone number with the international prefix, without spaces, ie +41221234567.")),
+        ])
+
+    business_phone = StringField(
+        # NOTE: Form label
+        _('Business phone number'),
+        filters=[strip_filter],
+        validators=[
+            Regexp(r'^\+[0-9]*$|^$', message=_("Phone number with the international prefix, without spaces, ie +41221234567.")),
+        ])
+
+    mobile_phone = StringField(
+        # NOTE: Form label
+        _('Mobile phone number'),
+        filters=[strip_filter],
+        validators=[
+            Regexp(r'^\+[0-9]*$|^$', message=_("Phone number with the international prefix, without spaces, ie +41221234567.")),
+        ])
+
+    other_phone = StringField(
+        # NOTE: Form label
+        _('Other phone number'),
+        filters=[strip_filter],
+        validators=[
+            Regexp(r'^\+[0-9]*$|^$', message=_("Phone number with the international prefix, without spaces, ie +41221234567.")),
+        ])
+
+    gender = SelectField(
+        _('Gender'),
+        choices=[
+            ('male', _('male')),
+            ('female', _('female')),
+            ('other', _('other'))]
+    )
+
+    country = SelectField(
+        _('Country'),
+        choices=[]
+    )
 
     keep_history = BooleanField(
         # NOTE: Form label
@@ -96,13 +137,17 @@ class ProfileForm(FlaskForm):
         description=_('If enabled the loan history is saved for a maximum of six months. It is visible to you and the library staff.'))
 
     def __init__(self, *args, **kwargs):
-        """."""
+        """Constructor."""
         super().__init__(*args, **kwargs)
         # read only fields
-        read_only(self.first_name)
-        read_only(self.last_name)
-        read_only(self.birth_date)
-        read_only(self.city)
+        get_readonly_fields = current_app.config.get(
+            'USERPROFILES_READONLY_FIELDS', [])
+        for field in get_readonly_fields():
+            read_only(getattr(self, field))
+        get_countries = current_app.config.get('USERPROFILES_COUNTRIES')
+        if get_countries:
+            self.country.choices = get_countries()
+
 
     def validate_username(form, field):
         """Wrap username validator for WTForms."""

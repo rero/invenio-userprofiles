@@ -61,7 +61,10 @@ class UserProfile(db.Model):
     first_name = db.Column(db.String(255), nullable=False, default='')
     """First name of person."""
 
-    birth_date = db.Column(db.Date, nullable=False)
+    gender = db.Column(db.String(255), nullable=False, default='')
+    """Gender of person."""
+
+    birth_date = db.Column(db.Date, nullable=True)
     """Birth date of person."""
 
     street = db.Column(db.String(255), nullable=False, default='')
@@ -73,8 +76,20 @@ class UserProfile(db.Model):
     city = db.Column(db.String(255), nullable=False, default='')
     """City address of person."""
 
-    phone = db.Column(db.String(255), nullable=False, default='')
-    """Phone number of person."""
+    country = db.Column(db.String(255), nullable=False, default='')
+    """Country address of person."""
+
+    home_phone = db.Column(db.String(255), nullable=False, default='')
+    """Home phone number of person."""
+
+    business_phone = db.Column(db.String(255), nullable=False, default='')
+    """Business phone number of person."""
+
+    mobile_phone = db.Column(db.String(255), nullable=False, default='')
+    """Mobile phone number of person."""
+
+    other_phone = db.Column(db.String(255), nullable=False, default='')
+    """Other phone number of person."""
 
     keep_history = db.Column(
         db.Boolean(name='keep_history'), nullable=False, default=False)
