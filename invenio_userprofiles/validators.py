@@ -18,7 +18,8 @@ username_regex = re.compile('^[a-zA-Z0-9][a-zA-Z0-9-_]{2}[a-zA-Z0-9-_]*$')
 
 USERNAME_RULES = _(
     'Username must start with a letter or a number, be at least three'
-    'characters long and only contain alphanumeric characters, dashes and underscores.')
+    ' characters long and only contain alphanumeric characters, dashes'
+    ' and underscores.')
 """Description of username validation rules.
 
 .. note:: Used for both form help text and for form validation error."""
